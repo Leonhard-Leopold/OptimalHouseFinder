@@ -10,4 +10,7 @@ Finding the optimal place to build a house based on regularly visited locations 
  
 This will find you the optimal place to build your house!
 
+You can test it here https://housefinder.leoleo.at/
+
 Have fun :)
+
