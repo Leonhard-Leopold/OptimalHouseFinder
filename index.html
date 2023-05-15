@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        // add api key login
+        // publish
+
+
+        var map;
+        var directionsService;
+        var center_marker;
+        var locations = [];
+        var tooltips = [];
+        var markers = [];
+        var routes = [];
+        var counter = 0;
+        var center = {lat: 47.0571566665677, lng: 15.462514713166064};
+        var setCenter = false;
+
+        async function find_optimal_center(locations, metrics, iterations, learning_rate, learning_rate_change, termination_distance){
+            console.log("old center", center);
+            const new_center = await get_optimal_center(locations, metrics, debug=false, iterations=iterations, learning_rate=learning_rate, learning_rate_change=learning_rate_change, termination_distance = termination_distance)
+            console.log("new center!", new_center);
+
+            // add_debug_tooltip(new_center["lat"], new_center["lng"], "RESULT!", bounce=true);
+            set_new_center(new_center.lat, new_center.lng);
+
+        }
+        function redirect(){
+            var key = document.getElementById("api_key").value;
+            console.log(key);
+            window.location = "index.html?key="+key;
+        }
+
+    </script>
+    <script src="./calc.js"></script>
+    <script src="./util.js"></script>
+    <script src="./main.js"></script>
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+<div id="cover">
+    <div>Please enter you Google Maps API Key:</div>
+    <input id="api_key"/>
+    <button id="go_button" onclick="redirect()">Go!</button>
+</div>
+<div id="wrapper">
+    <div id="map"></div>
+    <div id="dash">
+        <div>
+            <div class="vertical_section">
+                <h1>Optimal House Finder</h1>
+                <hr/>
+                <div class="toggle_wrapper">
+                    <span>Set Target Locations</span>
+                    <label class="switch">
+                        <input type="checkbox"  onclick='changeSetCenter(this);'>
+                        <span class="slider round"></span>
+                    </label>
+                    <span>Set Center</span>
+                </div>
+                <hr/>
+            </div>
+            <div class="vertical_section main_section">
+                <h2>Selected Locations:</h2>
+                <div id="dash_table"></div>
+            </div>
+            <div class="vertical_section">
+                <br/>
+                <hr/>
+                <div>
+                    <h3>Options:</h3>
+                    <button onclick="save()">Save Locations</button>
+                    <button onclick="load()">Load Locations</button>
+                    <button onclick="reset()">Reset Locations</button>
+                </div>
+                <br/>
+                <hr/>
+                <div>
+                    <h3>Find Optimal Center using ...</h3>
+                    <button onclick="find_optimal_center(locations, 'direct', 50, 5, 0.99, 0.0000001)">Air Distance</button>
+                    <button onclick="find_optimal_center(locations, 'distance', 30,  0.000002, 0.98,  10)">Distance <br/>(using Google Maps)</button>
+                    <button onclick="find_optimal_center(locations, 'time', 30, 0.00005, 0.98,  3)">Time <br/>(using Google Maps)</button>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+     document.getElementById("api_key").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("go_button").click();
+      }
+    });
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const key = urlParams.get('key');
+    console.log("API Key:", key);
+    if (key != null && key.length != 0){
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://maps.googleapis.com/maps/api/js?key='+key+'&callback=initMap';
+        document.head.appendChild(script);
+        document.getElementById("cover").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
+
