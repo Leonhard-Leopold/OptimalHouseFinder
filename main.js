@@ -12,11 +12,17 @@ function initMap() {
     center_marker = new google.maps.Marker({position: center, map: map, animation:google.maps.Animation.BOUNCE});
 
     google.maps.event.addListener(map, 'click', function(event) {
-        if(setCenter==true){
-            set_new_center(event.latLng.lat(), event.latLng.lng());
-        }
-        else{
-            add_location(event.latLng.lat(), event.latLng.lng());
+        if(clickFlag){
+            clickFlag = false;
+            if(setCenter==true){
+                set_new_center(event.latLng.lat(), event.latLng.lng());
+            }
+            else{
+                add_location(event.latLng.lat(), event.latLng.lng());
+            }
+            setTimeout(function(){
+                clickFlag = true;
+            }, 500);
         }
     });
     displayTable();

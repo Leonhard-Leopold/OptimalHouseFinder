@@ -7,7 +7,28 @@ body{
   background-color: #888;
   margin: 0;
 }
-
+#toast_wrapper{
+ position: fixed;
+ width: 350px;
+ right: 0;
+ top: 0;
+ padding: 20px;
+ z-index: 10;
+ transition: all 0.2s linear;
+}
+#toast_wrapper > div{
+ margin: 10px;
+ background: #6bcb6b;
+ color: white;
+ border-radius: 10px;
+ transition: all 0.2s linear;
+ position: relative;
+ right: -400px;
+ width: calc(100% - 50px);
+ padding: 25px;
+ z-index: 10;
+ font-size: 18px;
+}
 #map,
 #dash {
     height: calc(100vh - 40px);
@@ -53,6 +74,8 @@ body{
     font-size: 18px;
     border-radius: 5px;
     width: 460px;
+    border: unset;
+    outline: 0 !important;
 }
 #cover button:active, #cover button:hover{
      background: #2196f3;

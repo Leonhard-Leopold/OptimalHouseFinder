@@ -16,12 +16,18 @@
         var counter = 0;
         var center = {lat: 47.0571566665677, lng: 15.462514713166064};
         var setCenter = false;
+        var clickFlag = true;
 
         async function find_optimal_center(locations, metrics, iterations, learning_rate, learning_rate_change, termination_distance){
             console.log("old center", center);
+            if(metrics != 'direct'){
+              addToast("Finding optimal center.\nThis might take a while...", 4000);
+            }
             const new_center = await get_optimal_center(locations, metrics, debug=false, iterations=iterations, learning_rate=learning_rate, learning_rate_change=learning_rate_change, termination_distance = termination_distance)
             console.log("new center!", new_center);
-
+            if(metrics != 'direct' && new_center != undefined){
+              addToast("Optimal Center found!", 2000);
+            }
             // add_debug_tooltip(new_center["lat"], new_center["lng"], "RESULT!", bounce=true);
             set_new_center(new_center.lat, new_center.lng);
 
@@ -44,6 +50,7 @@
     <input id="api_key"/>
     <button id="go_button" onclick="redirect()">Go!</button>
 </div>
+<div id="toast_wrapper"></div>
 <div id="wrapper">
     <div id="map"></div>
     <div id="dash">

@@ -79,6 +79,26 @@ function displayTable(){
   }
 }
 
+function addToast(text, time){
+    var toast_wrapper = document.getElementById("toast_wrapper");
+    const toast = document.createElement("div");
+    const newContent = document.createTextNode(text);
+    toast.appendChild(newContent);
+    toast_wrapper.appendChild(toast);
+
+
+    setTimeout(function(){
+        toast.style.right = 0;
+        setTimeout(function(){
+            toast.style.right = "-400px";
+            setTimeout(function(){
+                toast.remove();
+            }, 500);
+        }, time);
+    }, 0);
+}
+
+
 function displaySummary(){
 
       var total_time = 0;
@@ -107,6 +127,7 @@ async function save(){
   const writer = await handle.createWritable()
   await writer.write(JSON.stringify(locations))
   await writer.close()
+  addToast("Locations saved...", 1000);
 }
 
 async function load(){
@@ -133,6 +154,7 @@ const pickerOpts = {
         add_location(loaded_locations[i].lat, loaded_locations[i].lng, name=loaded_locations[i].name, visits=loaded_locations[i].visits );
       }
       displayTable();
+      addToast("Locations loaded...", 1000);
   }
 }
 
